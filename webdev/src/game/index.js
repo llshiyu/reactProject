@@ -3,26 +3,40 @@ import React from 'react';
 import './index.css';
 
 class Square extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            value: null,
-        };
-    } // 在使用 JavaScript classes 时，你必须调用 super(); 方法才能在继承父类的子类中正确获取到类型的 this 。
+
     render() {
         return (
             <button className="square" onClick={() => {
-                this.setState({value: 'X'})
+                this.props.onClick()
             }}>
-                {this.state.value}
+                {this.props.value}
             </button>
         );
     }
 }
 
 class Board extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            squares: Array(9).fill(null)
+        }
+    }
+
     renderSquare(i) {
-        return <Square value={i}/>;
+        return (
+            <Square
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}/>
+        );
+    } // 在 JSX 元素的最外层套上了一小括号，以防止 JavaScript 代码在解析时自动在换行处添加分号。
+
+    handleClick(i) {
+        // 我们使用了 .slice() 方法来将之前的数组数据浅拷贝到了一个新的数组中，而不是修改已有的数组。
+        const squares = this.state.squares.slice();
+        squares[i] = 'X';
+        this.setState({squares: squares});
+        console.log(this.state.squares)
     }
 
     render() {
