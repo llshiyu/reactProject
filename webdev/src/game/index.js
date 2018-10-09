@@ -3,10 +3,18 @@ import React from 'react';
 import './index.css';
 
 class Square extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            value: null,
+        };
+    } // 在使用 JavaScript classes 时，你必须调用 super(); 方法才能在继承父类的子类中正确获取到类型的 this 。
     render() {
         return (
-            <button className="square">
-                {/* TODO */}
+            <button className="square" onClick={() => {
+                this.setState({value: 'X'})
+            }}>
+                {this.state.value}
             </button>
         );
     }
@@ -14,7 +22,7 @@ class Square extends React.Component {
 
 class Board extends React.Component {
     renderSquare(i) {
-        return <Square />;
+        return <Square value={i}/>;
     }
 
     render() {
@@ -48,7 +56,7 @@ class Game extends React.Component {
         return (
             <div className="game">
                 <div className="game-board">
-                    <Board />
+                    <Board/>
                 </div>
                 <div className="game-info">
                     <div>{/* status */}</div>
