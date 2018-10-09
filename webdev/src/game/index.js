@@ -2,24 +2,37 @@ import React from 'react';
 // import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+function Square(props) {
+    return (
+        <button className="square" onClick={props.onClick}>
+            {props.value}
+        </button>
+    );
+} // 另外一部分简化的内容则是事件处理函数的写法，这里我们把 onClick={() => props.onClick()} 直接修改为
+// onClick={props.onClick} , 注意不能写成 onClick={props.onClick()}
+// 否则 props.onClick 方法会在 Square 组件渲染时被直接触发而不是等到 Board 组件渲染完成时通过点击触发，
+// 又因为此时 Board 组件正在渲染中（即 Board 组件的 render() 方法正在调用），
+// 又触发 handleClick(i) 方法调用 setState() 会再次调用 render() 方法导致死循环。
 
-    render() {
-        return (
-            <button className="square" onClick={() => {
-                this.props.onClick()
-            }}>
-                {this.props.value}
-            </button>
-        );
-    }
-}
+// class Square extends React.Component {
+//
+//     render() {
+//         return (
+//             <button className="square" onClick={() => {
+//                 this.props.onClick()
+//             }}>
+//                 {this.props.value}
+//             </button>
+//         );
+//     }
+// }
 
 class Board extends React.Component {
     constructor() {
         super();
         this.state = {
-            squares: Array(9).fill(null)
+            squares: Array(9).fill(null),
+            xIsNext: true,
         }
     }
 
@@ -34,13 +47,16 @@ class Board extends React.Component {
     handleClick(i) {
         // 我们使用了 .slice() 方法来将之前的数组数据浅拷贝到了一个新的数组中，而不是修改已有的数组。
         const squares = this.state.squares.slice();
-        squares[i] = 'X';
-        this.setState({squares: squares});
+        squares[i] = this.state.xIsNext ? 'X' : 'O';
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext,
+        });
         console.log(this.state.squares)
     }
 
     render() {
-        const status = 'Next player: X';
+        const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
 
         return (
             <div>
