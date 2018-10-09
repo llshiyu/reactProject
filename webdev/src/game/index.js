@@ -14,18 +14,30 @@ function Square(props) {
 // 又因为此时 Board 组件正在渲染中（即 Board 组件的 render() 方法正在调用），
 // 又触发 handleClick(i) 方法调用 setState() 会再次调用 render() 方法导致死循环。
 
-// class Square extends React.Component {
-//
-//     render() {
-//         return (
-//             <button className="square" onClick={() => {
-//                 this.props.onClick()
-//             }}>
-//                 {this.props.value}
-//             </button>
-//         );
-//     }
-// }
+/***
+ * 判断获胜方的算法函数
+ * @param squares
+ * @returns {*}
+ */
+function calculateWinner(squares) {
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+    for (let i = 0; i < lines.length; i++) {
+        const [a, b, c] = lines[i];
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return squares[a];
+        }
+    }
+    return null;
+}
 
 class Board extends React.Component {
     constructor() {
@@ -56,8 +68,13 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
-
+        const winner = calculateWinner(this.state.squares);
+        let status;
+        if (winner) {
+            status = 'Winner: ' + winner;
+        } else {
+            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+        }
         return (
             <div>
                 <div className="status">{status}</div>
