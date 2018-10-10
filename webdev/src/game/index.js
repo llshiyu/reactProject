@@ -73,7 +73,7 @@ class Board extends React.Component {
 
 class Game extends React.Component {
     handleClick(i) {
-        const history = this.state.history.slice(0, this.state.stepNumber + 1);;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
         // 我们使用了 .slice() 方法来将之前的数组数据浅拷贝到了一个新的数组中，而不是修改已有的数组。
         const squares = current.squares.slice();
