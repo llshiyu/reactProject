@@ -13,7 +13,7 @@ function HelloWorld() {
         <div>hello,{formatName(user)}</div>
     )
 }
-
+export default HelloWorld;
 // class HelloWorld extends React.Component{
 //     render(){
 //         return(
@@ -66,7 +66,6 @@ function Comment(props) {
         </div>
     );
 }
-
 const comment = {
     date: new Date(),
     text: 'I hope you enjoy learning React!',
@@ -83,4 +82,54 @@ ReactDOM.render(
     document.getElementById('component')
 );
 
-export default HelloWorld;
+
+class Clock extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            data: new Date()
+        }
+    }
+    // 当组件输出到 DOM 后会执行 componentDidMount() 钩子
+    componentDidMount(){
+        this.timerID = setInterval(()=>this.tick(),1000)
+    }
+
+    // 在 componentWillUnmount()生命周期钩子中卸载计时器：
+    //一旦Clock组件被从DOM中移除，React会调用componentWillUnmount()这个钩子函数，定时器也就会被清除。
+    componentWillUnmount(){
+        clearInterval(this.timerID);
+    }
+
+    tick(){
+        this.setState({
+            data: new Date()
+        })
+    }
+
+    render(){
+        return (
+            <div>It is {this.state.data.toLocaleTimeString()}</div>
+        )
+    }
+}
+ReactDOM.render(
+    <Clock />,
+    document.getElementById('state')
+);
+
+
+function ActionLink() {
+    return (
+        <a href="#" onClick={handleClick}>click</a>
+    );
+
+    function handleClick(e){
+        e.preventDefault();
+        console.log('click');
+    }
+}
+ReactDOM.render(
+    <ActionLink />,
+    document.getElementById('event')
+);
