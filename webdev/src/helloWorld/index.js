@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css'
 
 function formatName(user) {
     return user.firstName + ' ' + user.lastName;
@@ -181,7 +182,7 @@ ReactDOM.render(
 
 const numbers = [1, 2, 3, 4, 5];
 const listItems = numbers.map((number) =>
-    <li>{number}</li>
+    <li key={number}>{number}</li>
 );
 
 ReactDOM.render(
@@ -193,25 +194,84 @@ class NameForm extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            name:''
-        }
-        this.handleChange = this.handleChange.bind(this);
+            name:'',
+            desc:'',
+            type:'3',
+            isGoing: true,
+            numberOfGuests: 2
+        };
+
+        this.handleName = this.handleName.bind(this);
+        this.handleDesc = this.handleDesc.bind(this);
+        this.handleType = this.handleType.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit(e){
-        console.log('name:'+this.state.name);
+        console.log('name:'+this.state.name+' desc:'+this.state.desc+' type:'+this.state.type);
+        console.log('isGoing:'+this.state.isGoing+' numberOfGuests:'+this.state.numberOfGuests);
         e.preventDefault();
     }
-    handleChange(e){
+    handleName(e){
         this.setState({
             name: e.target.value
+        });
+        // console.log('change name:'+e.target.value+' '+e.target.value.toUpperCase());
+    }
+    handleDesc(e){
+        this.setState({
+            desc: e.target.value
+        });
+    }
+    handleType(e){
+        this.setState({
+            type: e.target.value
         })
+    }
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
     }
     render(){
         return(
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} className='form-box'>
+                <label htmlFor="name">
+                    name： <input type="text" value={this.state.name} onChange={this.handleName}/>
+                </label>
+                <label htmlFor="desc">
+                    desc：
+                    <textarea name="desc" id="" cols="30" rows="10" value={this.state.desc} onChange={this.handleDesc}></textarea>
+                </label>
+                <label htmlFor="type">
+                    type：
+                    <select name="type" value={this.state.type} onChange={this.handleType}>
+                        <option value="1">type1</option>
+                        <option value="2">type2</option>
+                        <option value="3">type3</option>
+                        <option value="4">type4</option>
+                    </select>
+                </label>
                 <label>
-                    name: <input type="text" value={this.state.name} onChange={this.handleChange}/>
+                    Is going:
+                    <input
+                        name="isGoing"
+                        type="checkbox"
+                        checked={this.state.isGoing}
+                        onChange={this.handleInputChange} />
+                </label>
+                <br />
+                <label>
+                    Number of guests:
+                    <input
+                        name="numberOfGuests"
+                        type="number"
+                        value={this.state.numberOfGuests}
+                        onChange={this.handleInputChange} />
                 </label>
                 <input type="submit" value='submit'/>
             </form>
