@@ -179,4 +179,46 @@ ReactDOM.render(
     document.getElementById('event')
 );
 
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+    <li>{number}</li>
+);
 
+ReactDOM.render(
+    <ul>{listItems}</ul>,
+    document.getElementById('list')
+);
+
+class NameForm extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            name:''
+        }
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleSubmit(e){
+        console.log('name:'+this.state.name);
+        e.preventDefault();
+    }
+    handleChange(e){
+        this.setState({
+            name: e.target.value
+        })
+    }
+    render(){
+        return(
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    name: <input type="text" value={this.state.name} onChange={this.handleChange}/>
+                </label>
+                <input type="submit" value='submit'/>
+            </form>
+        )
+    }
+}
+ReactDOM.render(
+    <NameForm />,
+    document.getElementById('form')
+);
